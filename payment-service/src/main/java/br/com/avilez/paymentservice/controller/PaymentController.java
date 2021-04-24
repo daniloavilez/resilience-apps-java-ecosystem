@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/payment")
 public class PaymentController {
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping(
+            consumes = "application/json",
+            produces = "application/json"
+    )
     public boolean newPayment(@RequestBody Payment payment) {
         return true;
     }

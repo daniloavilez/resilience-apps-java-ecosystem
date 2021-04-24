@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -18,11 +21,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @NotBlank
     public Long productId;
 
+    @NotBlank
     public String productName;
 
+    @DecimalMin(value = "0.01")
     public BigDecimal totalPurchase;
 
     public String status;
+
+    public Payment payment;
 }
