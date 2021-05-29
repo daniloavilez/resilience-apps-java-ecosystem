@@ -8,7 +8,7 @@
 
 In order to start consul we need to give the command below:
 
-`consult agent -dev`
+`consul agent -dev`
 
 To open consul console [http://localhost:8500](http://localhost:8500)
 

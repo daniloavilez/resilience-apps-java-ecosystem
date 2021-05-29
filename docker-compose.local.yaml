@@ -1,0 +1,10 @@
+version: '2'
+services:
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+  adminer:
+    ports:
+      - 8080:8080

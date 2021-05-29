@@ -1,36 +1,49 @@
 package br.com.avilez.orderservice.service;
 
+import br.com.avilez.orderservice.client.PaymentClient;
 import br.com.avilez.orderservice.command.CommandPayment;
 import br.com.avilez.orderservice.configuration.ConsulProperties;
 import br.com.avilez.orderservice.model.Order;
 import br.com.avilez.orderservice.model.Payment;
-import com.google.gson.Gson;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 import rx.Observer;
-import rx.functions.Action1;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
 
 @Service
 public class PaymentService {
 
     private RestTemplate restTemplate;
 
+    private PaymentClient paymentClient;
+
     @Autowired
     private ConsulProperties consulProperties;
 
-    public PaymentService(RestTemplate restTemplate) {
+    public PaymentService(RestTemplate restTemplate, PaymentClient paymentClient) {
         this.restTemplate = restTemplate;
+        this.paymentClient = paymentClient;
+    }
+
+    public Order newPaymentWithFeign(Order order) {
+        Payment payment = new Payment();
+        payment.totalPurchase = BigDecimal.valueOf(1.29);
+
+        boolean wasPaid = paymentClient.pay(payment);
+
+        if (wasPaid) {
+            order.status = "COMPLETED";
+        } else {
+            order.status = "NOT_COMPLETED";
+        }
+
+        return order;
     }
 
     public Order newPayment(Order order) throws IOException, URISyntaxException {

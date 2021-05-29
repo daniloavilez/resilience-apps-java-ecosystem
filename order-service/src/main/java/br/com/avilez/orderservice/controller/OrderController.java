@@ -24,7 +24,9 @@ public class OrderController {
     public Order newOrder(@RequestHeader(value = "my-test", required = false) String mytest,
                           @RequestBody Order order) throws IOException, URISyntaxException {
 
-        order = paymentService.newPayment(order);
+//        order = paymentService.newPayment(order);
+
+        order = paymentService.newPaymentWithFeign(order);
 
         return order;
     }
